@@ -1,8 +1,7 @@
 import type React from 'react';
 import { useState, useRef } from 'react';
-import { parseConfigFile } from '@/utils/parse';
 import type { FileUploaderProps } from '@/typings';
-import { tw } from '@/utils/merge';
+import { parseConfigFile, tw } from '@/utils';
 
 export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);

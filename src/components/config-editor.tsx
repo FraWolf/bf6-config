@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { ConfigEditorProps } from '@/typings';
-import { tw } from '@/utils/merge';
+import { tw, USEFUL_LINKS } from '@/utils';
 
 export default function ConfigEditor({ configData, fileName, onBack, onSave }: ConfigEditorProps) {
   const [config, setConfig] = useState(configData);
@@ -142,7 +142,8 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
       <div className="mx-auto max-w-7xl px-6 py-6">
         <div className="grid grid-cols-12 gap-6">
           {/* Sidebar */}
-          <aside className="col-span-3">
+          <aside className="col-span-3 flex flex-col gap-5">
+            {/* Categories */}
             <div className="bg-card border-border sticky top-6 border">
               <div className="border-border border-b p-4">
                 <h2 className="text-muted-foreground text-xs font-bold tracking-widest">CATEGORIES</h2>
@@ -172,6 +173,35 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                 </button>
               </nav>
             </div>
+
+            {/* Useful links */}
+            {USEFUL_LINKS.length > 0 && (
+              <div className="bg-card border-border sticky top-6 border">
+                <div className="border-border border-b p-4">
+                  <h2 className="text-muted-foreground text-xs font-bold tracking-widest">USEFUL LINKS</h2>
+                </div>
+                <nav className="p-2">
+                  {USEFUL_LINKS.map((link, index) => (
+                    <div
+                      key={index}
+                      className="hover:text-primary decoration-primary w-full cursor-pointer truncate px-3 py-2 text-left text-sm font-semibold underline underline-offset-4 transition-colors hover:decoration-white"
+                    >
+                      <a href={link.url} target="_blank">
+                        {link.title}
+                      </a>
+                    </div>
+                  ))}
+
+                  <div className="bg-border my-2 h-px" />
+                  <p className="text-center text-xs text-white opacity-50">
+                    made by{' '}
+                    <a href="https://frawolf.dev" className="text-primary" target="_blank">
+                      frawolf.dev
+                    </a>
+                  </p>
+                </nav>
+              </div>
+            )}
           </aside>
 
           {/* Main Content */}
