@@ -2,6 +2,7 @@ import type React from 'react';
 import { useState, useRef } from 'react';
 import { parseConfigFile } from '@/utils/parse';
 import type { FileUploaderProps } from '@/typings';
+import { tw } from '@/utils/merge';
 
 export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -81,11 +82,11 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            className={`rounded border-2 border-dashed transition-all duration-200 ${
-              isDragging
-                ? 'border-primary bg-primary/10'
-                : 'border-border bg-secondary/50 hover:border-primary/50 hover:bg-secondary'
-            } `}
+            onClick={() => fileInputRef.current?.click()}
+            className={tw('cursor-pointer rounded border-2 border-dashed transition-all duration-200', {
+              'border-primary bg-primary/10': isDragging,
+              'border-border bg-secondary/50 hover:border-primary/50 hover:bg-secondary': !isDragging
+            })}
           >
             <div className="p-12 text-center">
               <div className="mb-4 flex justify-center">
@@ -102,7 +103,7 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
               <p className="text-muted-foreground mb-6 text-sm">or click to browse</p>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary/50 border-2 px-6 py-3 font-bold tracking-wider transition-colors"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary/50 cursor-pointer border-2 px-6 py-3 font-bold tracking-wider transition-colors"
               >
                 SELECT FILE
               </button>

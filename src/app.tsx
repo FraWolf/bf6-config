@@ -40,6 +40,8 @@ export function App() {
   useEffect(() => {
     if (configData || fileName) {
       localStorage.setItem('configFile', JSON.stringify({ fileName, content: configData }));
+    } else {
+      localStorage.removeItem('configFile');
     }
   }, [configData, fileName]);
 

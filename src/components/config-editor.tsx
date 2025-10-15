@@ -52,7 +52,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
       })
       .join('\n');
 
-    const blob = new Blob([configText], { type: 'text' });
+    const blob = new Blob([configText], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -104,7 +104,10 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button onClick={onBack} className="hover:bg-secondary border-border border p-2 transition-colors">
+              <button
+                onClick={onBack}
+                className="hover:bg-secondary border-border cursor-pointer border p-2 transition-colors"
+              >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -120,7 +123,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
             </div>
             <button
               onClick={handleExport}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary/50 flex items-center gap-2 border px-4 py-2 text-sm font-bold tracking-wider transition-colors"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 border-primary/50 flex cursor-pointer items-center gap-2 border px-4 py-2 text-sm font-bold tracking-wider transition-colors"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -149,7 +152,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                   <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={tw('w-full px-3 py-2 text-left text-sm font-semibold transition-colors', {
+                    className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
                       'bg-primary text-primary-foreground': activeCategory === category,
                       'text-foreground hover:bg-secondary': activeCategory !== category
                     })}
@@ -160,7 +163,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                 <div className="bg-border my-2 h-px" />
                 <button
                   onClick={() => setActiveCategory('All')}
-                  className={tw('w-full px-3 py-2 text-left text-sm font-semibold transition-colors', {
+                  className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
                     'bg-primary text-primary-foreground': activeCategory === 'All',
                     'text-foreground hover:bg-secondary': activeCategory !== 'All'
                   })}
