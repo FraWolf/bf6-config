@@ -8,3 +8,8 @@ export interface ConfigEditorProps {
   onBack: () => void;
   onSave: (data: Record<string, any>) => void;
 }
+
+export interface LocalStorageConfig {
+  fileName: string;
+  content: Record<string, Record<string, any>>;
+}
