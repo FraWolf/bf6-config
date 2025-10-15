@@ -38,10 +38,10 @@ export function App() {
 
   // Update localStorage when configData gets updated
   useEffect(() => {
-    if (configData) {
-      localStorage.setItem('configFile', JSON.stringify(configData));
+    if (configData || fileName) {
+      localStorage.setItem('configFile', JSON.stringify({ fileName, content: configData }));
     }
-  }, [configData]);
+  }, [configData, fileName]);
 
   return (
     <main className="bg-background min-h-screen">
