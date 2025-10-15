@@ -8,7 +8,19 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleValueChange = (key: string, value: string) => {
-    const newConfig = { ...config, [key]: value };
+    const category = getCategoryFromEntry(key);
+
+    if (!category) {
+      return;
+    }
+
+    const newConfig = {
+      ...config,
+      [category]: {
+        ...config[category],
+        [key]: value
+      }
+    };
     setConfig(newConfig);
     onSave(newConfig);
   };
@@ -33,14 +45,18 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
 
   const handleExport = () => {
     const configText = Object.entries(config)
-      .map(([key, value]) => `${key} "${value}"`)
+      .flatMap(([category, categoryValues]) => {
+        return Object.entries(categoryValues).flatMap(([key, value]) => {
+          return `${category}.${key} ${value !== 'None' ? value : ''}`;
+        });
+      })
       .join('\n');
 
-    const blob = new Blob([configText], { type: 'text/plain' });
+    const blob = new Blob([configText], { type: 'text' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = fileName || 'config.cfg';
+    a.download = fileName || 'PROFSAVE_profile';
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -58,6 +74,16 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
       );
     });
   }, [config, searchQuery, activeCategory]);
+
+  const getCategoryFromEntry = (entry: string) => {
+    const resultCategory = Object.entries(config).find(([_, configValue]) => {
+      return Object.entries(configValue).find(([key]) => {
+        return entry === key;
+      });
+    });
+
+    return resultCategory?.[0];
+  };
 
   const getCategoryEntries = (category: string) => {
     if (!category) {
@@ -83,9 +109,13 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </button>
-              <div>
-                <h1 className="text-xl font-bold tracking-tight">CONFIG EDITOR</h1>
-                <p className="text-muted-foreground text-xs">{fileName}</p>
+
+              <div className="flex flex-row items-center justify-center gap-2">
+                <img src="/img/bf6.png" alt="BF6 Logo" className="h-11 w-11 object-contain" />
+                <div>
+                  <h1 className="text-xl font-bold tracking-tight">CONFIG EDITOR</h1>
+                  <p className="text-muted-foreground text-xs">/{fileName}</p>
+                </div>
               </div>
             </div>
             <button
@@ -180,22 +210,24 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                 </span>
               </div>
               <div className="divide-border divide-y">
-                {(searchQuery ? filteredEntries : getCategoryEntries(activeCategory)).map(([key, value]) => (
-                  <div key={key} className="hover:bg-secondary/50 p-4 transition-colors">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0 flex-1">
-                        <label className="text-foreground mb-1 block font-mono text-sm font-semibold">{key}</label>
-                        <p className="text-muted-foreground text-xs">Configuration parameter</p>
+                {(searchQuery ? filteredEntries : getCategoryEntries(activeCategory)).map(
+                  ([key, value]: [key: string, value: any]) => (
+                    <div key={key} className="hover:bg-secondary/50 p-4 transition-colors">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <label className="text-foreground block font-mono text-sm font-semibold">{key}</label>
+                          {/* <p className="text-muted-foreground text-xs">Configuration parameter</p> */}
+                        </div>
+                        <input
+                          type="text"
+                          value={value}
+                          onChange={(e) => handleValueChange(key, e.target.value)}
+                          className="bg-input border-border text-foreground focus:ring-ring w-64 border px-3 py-2 font-mono text-sm focus:ring-2 focus:outline-none"
+                        />
                       </div>
-                      <input
-                        type="text"
-                        value={value}
-                        onChange={(e) => handleValueChange(key, e.target.value)}
-                        className="bg-input border-border text-foreground focus:ring-ring w-64 border px-3 py-2 font-mono text-sm focus:ring-2 focus:outline-none"
-                      />
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
                 {(searchQuery ? filteredEntries : getCategoryEntries(activeCategory)).length === 0 && (
                   <div className="p-12 text-center">
                     <p className="text-muted-foreground">No settings found</p>

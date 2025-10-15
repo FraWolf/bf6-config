@@ -61,19 +61,9 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
     <div className="flex min-h-screen items-center justify-center p-6">
       <div className="w-full max-w-2xl">
         {/* Header */}
-        <div className="mb-12 text-center">
+        <div className="mb-6 text-center">
           <div className="mb-4 inline-flex items-center gap-3">
-            <div className="bg-primary/20 border-primary flex h-12 w-12 items-center justify-center border-2">
-              <svg className="text-primary h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
+            <img src="/img/bf6.png" alt="BF6 Logo" className="h-11 w-11 object-contain" />
           </div>
           <h1 className="text-foreground mb-2 text-4xl font-bold tracking-tight">BATTLEFIELD 6</h1>
           <p className="text-primary text-xl font-semibold tracking-wider">CONFIG EDITOR</p>
@@ -84,7 +74,7 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
         <div className="bg-card border-border border-2 p-8">
           <div className="mb-6">
             <h2 className="text-muted-foreground mb-2 text-sm font-bold tracking-widest">STEP 1: UPLOAD CONFIG FILE</h2>
-            <p className="text-muted-foreground text-sm">Upload your Battlefield 6 configuration file (.cfg or .txt)</p>
+            <p className="text-muted-foreground text-sm">Upload your Battlefield 6 configuration file (PROFSAVE_profile)</p>
           </div>
 
           <div
@@ -116,7 +106,7 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
               >
                 SELECT FILE
               </button>
-              <input ref={fileInputRef} type="file" accept=".cfg,.txt" onChange={handleFileInput} className="hidden" />
+              <input ref={fileInputRef} type="file" onChange={handleFileInput} className="hidden" />
             </div>
           </div>
 
@@ -137,12 +127,27 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
 
           <div className="border-border mt-6 border-t pt-6">
             <p className="text-muted-foreground text-xs">
-              <span className="font-bold">SUPPORTED FORMATS:</span> .cfg, .txt
-            </p>
-            <p className="text-muted-foreground mt-1 text-xs">
               <span className="font-bold">LOCATION:</span> Documents/Battlefield 6/settings/
+              <span className="font-bold">YOUR PLATFORM</span>/PROFSAVE_profile
             </p>
           </div>
+        </div>
+
+        {/* Copyright footer */}
+        <div className="mt-6 flex flex-col gap-2 text-center">
+          <p className="text-muted text-xs">
+            All rights to the Battlefield franchise, including its trademarks, logos, characters, and related content, are
+            the property of Electronic Arts Inc. (EA) and its subsidiary DICE (EA Digital Illusions CE AB). This project/fan
+            work is not affiliated with, endorsed by, or sponsored by EA or DICE. All rights reserved to their respective
+            owners.
+          </p>
+
+          <p className="text-muted text-xs">
+            made by{' '}
+            <a href="https://frawolf.dev" className="text-primary/50" target="_blank">
+              frawolf.dev
+            </a>
+          </p>
         </div>
       </div>
     </div>
