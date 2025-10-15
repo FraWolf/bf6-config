@@ -142,70 +142,72 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
       <div className="mx-auto max-w-7xl px-6 py-6">
         <div className="grid grid-cols-12 gap-6">
           {/* Sidebar */}
-          <aside className="col-span-3 flex flex-col gap-5">
-            {/* Categories */}
-            <div className="bg-card border-border sticky top-6 border">
-              <div className="border-border border-b p-4">
-                <h2 className="text-muted-foreground text-xs font-bold tracking-widest">CATEGORIES</h2>
-              </div>
-              <nav className="p-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
-                      'bg-primary text-primary-foreground': activeCategory === category,
-                      'text-foreground hover:bg-secondary': activeCategory !== category
-                    })}
-                  >
-                    {category}
-                  </button>
-                ))}
-                <div className="bg-border my-2 h-px" />
-                <button
-                  onClick={() => setActiveCategory('All')}
-                  className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
-                    'bg-primary text-primary-foreground': activeCategory === 'All',
-                    'text-foreground hover:bg-secondary': activeCategory !== 'All'
-                  })}
-                >
-                  All Settings
-                </button>
-              </nav>
-            </div>
-
-            {/* Useful links */}
-            {USEFUL_LINKS.length > 0 && (
-              <div className="bg-card border-border sticky top-6 border">
+          <aside className="md:col-span-4 lg:col-span-3">
+            <div className="sticky top-6 flex flex-col gap-5">
+              {/* Categories */}
+              <div className="bg-card border-border relative border">
                 <div className="border-border border-b p-4">
-                  <h2 className="text-muted-foreground text-xs font-bold tracking-widest">USEFUL LINKS</h2>
+                  <h2 className="text-muted-foreground text-xs font-bold tracking-widest">CATEGORIES</h2>
                 </div>
                 <nav className="p-2">
-                  {USEFUL_LINKS.map((link, index) => (
-                    <div
-                      key={index}
-                      className="hover:text-primary decoration-primary w-full cursor-pointer truncate px-3 py-2 text-left text-sm font-semibold underline underline-offset-4 transition-colors hover:decoration-white"
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
+                        'bg-primary text-primary-foreground': activeCategory === category,
+                        'text-foreground hover:bg-secondary': activeCategory !== category
+                      })}
                     >
-                      <a href={link.url} target="_blank">
-                        {link.title}
-                      </a>
-                    </div>
+                      {category}
+                    </button>
                   ))}
-
                   <div className="bg-border my-2 h-px" />
-                  <p className="text-center text-xs text-white opacity-50">
-                    made by{' '}
-                    <a href="https://frawolf.dev" className="text-primary" target="_blank">
-                      frawolf.dev
-                    </a>
-                  </p>
+                  <button
+                    onClick={() => setActiveCategory('All')}
+                    className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
+                      'bg-primary text-primary-foreground': activeCategory === 'All',
+                      'text-foreground hover:bg-secondary': activeCategory !== 'All'
+                    })}
+                  >
+                    All Settings
+                  </button>
                 </nav>
               </div>
-            )}
+
+              {/* Useful links */}
+              {USEFUL_LINKS.length > 0 && (
+                <div className="bg-card border-border relative border">
+                  <div className="border-border border-b p-4">
+                    <h2 className="text-muted-foreground text-xs font-bold tracking-widest">USEFUL LINKS</h2>
+                  </div>
+                  <nav className="p-2">
+                    {USEFUL_LINKS.map((link, index) => (
+                      <div
+                        key={index}
+                        className="hover:text-primary decoration-primary w-full cursor-pointer truncate px-3 py-2 text-left text-sm font-semibold underline underline-offset-4 transition-colors hover:decoration-white"
+                      >
+                        <a href={link.url} target="_blank">
+                          {link.title}
+                        </a>
+                      </div>
+                    ))}
+
+                    <div className="bg-border my-2 h-px" />
+                    <p className="text-center text-xs text-white opacity-50">
+                      made by{' '}
+                      <a href="https://frawolf.dev" className="text-primary" target="_blank">
+                        frawolf.dev
+                      </a>
+                    </p>
+                  </nav>
+                </div>
+              )}
+            </div>
           </aside>
 
           {/* Main Content */}
-          <main className="col-span-9">
+          <main className="md:col-span-8 lg:col-span-9">
             {/* Search */}
             <div className="mb-6">
               <div className="relative">
