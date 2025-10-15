@@ -11,18 +11,16 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
   const handleFile = (file: File) => {
     setError('');
 
-    if (!file.name.endsWith('.cfg') && !file.name.endsWith('.txt')) {
-      setError('Please upload a .cfg or .txt file');
-      return;
-    }
+    // if (!file.name.endsWith('.cfg') && !file.name.endsWith('.txt')) {
+    //   setError('Please upload a .cfg or .txt file');
+    //   return;
+    // }
 
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const content = e.target?.result as string;
         const parsedData = parseConfigFile(content);
-
-        console.log(JSON.stringify(parsedData));
 
         if (Object.keys(parsedData).length === 0) {
           setError('No valid config entries found in file');
