@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+"use client";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useState } from "react";
+import FileUploader from "@/components/file-uploader";
+import ConfigEditor from "@/components/config-editor";
+
+export function App() {
+  const [configData, setConfigData] = useState<Record<string, any> | null>(
+    null
+  );
+  const [fileName, setFileName] = useState<string>("");
+
+  const handleFileLoaded = (data: Record<string, any>, name: string) => {
+    setConfigData(data);
+    setFileName(name);
+  };
+
+  const handleBack = () => {
+    setConfigData(null);
+    setFileName("");
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <main className="min-h-screen bg-background">
+      {!configData ? (
+        <FileUploader onFileLoaded={handleFileLoaded} />
+      ) : (
+        <ConfigEditor
+          configData={configData}
+          fileName={fileName}
+          onBack={handleBack}
+          onSave={setConfigData}
+        />
+      )}
+    </main>
+  );
 }
-
-export default App
