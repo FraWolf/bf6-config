@@ -18,6 +18,10 @@ export function App() {
   };
 
   useEffect(() => {
+    if (!localStorage) {
+      return;
+    }
+
     if (!configData && !fileName) {
       const localStorageConfig = localStorage.getItem('configFile');
       if (localStorageConfig) {
@@ -38,6 +42,10 @@ export function App() {
 
   // Update localStorage when configData gets updated
   useEffect(() => {
+    if (!localStorage) {
+      return;
+    }
+
     if (configData || fileName) {
       localStorage.setItem('configFile', JSON.stringify({ fileName, content: configData }));
     } else {
