@@ -133,14 +133,14 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                   d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
                 />
               </svg>
-              EXPORT
+              <span className="hidden sm:block">EXPORT</span>
             </button>
           </div>
         </div>
       </header>
 
       <div className="mx-auto max-w-7xl px-6 py-6">
-        <div className="grid grid-cols-12 gap-6">
+        <div className="flex flex-col gap-6 sm:grid sm:grid-cols-12">
           {/* Sidebar */}
           <aside className="md:col-span-4 lg:col-span-3">
             <div className="sticky top-6 flex flex-col gap-5">
@@ -248,7 +248,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                 {(searchQuery ? filteredEntries : getCategoryEntries(activeCategory)).map(
                   ([key, value]: [key: string, value: any]) => (
                     <div key={key} className="hover:bg-secondary/50 p-4 transition-colors">
-                      <div className="flex items-center justify-between gap-4">
+                      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="min-w-0 flex-1">
                           <label className="text-foreground block font-mono text-sm font-semibold">{key}</label>
                           {/* <p className="text-muted-foreground text-xs">Configuration parameter</p> */}
@@ -257,7 +257,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                           type="text"
                           value={value}
                           onChange={(e) => handleValueChange(key, e.target.value)}
-                          className="bg-input border-border text-foreground focus:ring-ring w-64 border px-3 py-2 font-mono text-sm focus:ring-2 focus:outline-none"
+                          className="bg-input border-border text-foreground focus:ring-ring w-full border px-3 py-2 font-mono text-sm focus:ring-2 focus:outline-none sm:w-64"
                         />
                       </div>
                     </div>

@@ -135,16 +135,16 @@ export default function FileUploader({ onFileLoaded }: FileUploaderProps) {
 
         {/* Copyright footer */}
         <div className="mt-6 flex flex-col gap-2 text-center">
-          <p className="text-muted text-xs">
+          <p className="text-muted-foreground text-xs">
             All rights to the Battlefield franchise, including its trademarks, logos, characters, and related content, are
             the property of Electronic Arts Inc. (EA) and its subsidiary DICE (EA Digital Illusions CE AB). This project/fan
             work is not affiliated with, endorsed by, or sponsored by EA or DICE. All rights reserved to their respective
             owners.
           </p>
 
-          <p className="text-muted text-xs">
+          <p className="text-muted-foreground/50 text-xs">
             made by{' '}
-            <a href="https://frawolf.dev" className="text-primary/50" target="_blank">
+            <a href="https://frawolf.dev" className="text-primary/50 font-bold" target="_blank">
               frawolf.dev
             </a>
           </p>
