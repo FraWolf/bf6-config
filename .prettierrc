@@ -1,0 +1,16 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 100,
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.css", "*.scss", "*.json"],
+      "options": {
+        "printWidth": 125
+      }
+    }
+  ]
+}
