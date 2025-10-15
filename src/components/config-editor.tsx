@@ -1,23 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { ConfigEditorProps } from '@/typings';
-
-const CONFIG_CATEGORIES = {
-  Graphics: [
-    'GstRender.Dx11Enable',
-    'GstRender.ResolutionWidth',
-    'GstRender.ResolutionHeight',
-    'GstRender.FullscreenEnabled',
-    'GstRender.VSyncEnabled',
-    'GstRender.FramerateLimiter'
-  ],
-  Audio: ['GstAudio.MasterVolume', 'GstAudio.MusicVolume', 'GstAudio.EffectsVolume', 'GstAudio.VoiceVolume'],
-  Gameplay: ['GstGameplay.MouseSensitivity', 'GstGameplay.InvertY', 'GstGameplay.FOV', 'GstGameplay.AimAssist'],
-  Network: ['GstNetwork.MaxPing', 'GstNetwork.TickRate', 'GstNetwork.Region']
-};
+import { tw } from '@/utils/merge';
 
 export default function ConfigEditor({ configData, fileName, onBack, onSave }: ConfigEditorProps) {
   const [config, setConfig] = useState(configData);
-  const [activeCategory, setActiveCategory] = useState<string>('Graphics');
+  const [activeCategory, setActiveCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleValueChange = (key: string, value: string) => {
@@ -25,6 +12,24 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
     setConfig(newConfig);
     onSave(newConfig);
   };
+
+  const categories = useMemo(() => {
+    if (!config) {
+      return [];
+    }
+
+    const configKeys = Object.keys(config);
+    setActiveCategory(configKeys?.[0]);
+    return configKeys;
+  }, [config]);
+
+  const allValues = useMemo(() => {
+    const flattedValues = Object.values(config).flatMap((item) => {
+      return Object.entries(item);
+    });
+
+    return Object.fromEntries(flattedValues);
+  }, [config]);
 
   const handleExport = () => {
     const configText = Object.entries(config)
@@ -40,20 +45,31 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
     URL.revokeObjectURL(url);
   };
 
-  const filteredEntries = Object.entries(config).filter(
-    ([key, value]) =>
-      key.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(value).toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredEntries = useMemo(() => {
+    if (!config || !searchQuery || !activeCategory) {
+      return [];
+    }
+
+    const searchCategory = activeCategory === 'All' ? allValues : config?.[activeCategory];
+    return Object.entries(searchCategory).filter(([key, value]) => {
+      return (
+        key.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+        String(value).toLowerCase().includes(searchQuery?.toLowerCase())
+      );
+    });
+  }, [config, searchQuery, activeCategory]);
 
   const getCategoryEntries = (category: string) => {
-    const keys = CONFIG_CATEGORIES[category as keyof typeof CONFIG_CATEGORIES] || [];
-    return Object.entries(config).filter(([key]) => keys.some((k) => key.includes(k)));
-  };
+    if (!category) {
+      return [];
+    }
 
-  useEffect(() => {
-    console.log(config);
-  }, []);
+    if (category === 'All') {
+      return Object.entries(allValues);
+    }
+
+    return Object.entries(config[category]);
+  };
 
   return (
     <div className="min-h-screen">
@@ -99,15 +115,14 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                 <h2 className="text-muted-foreground text-xs font-bold tracking-widest">CATEGORIES</h2>
               </div>
               <nav className="p-2">
-                {Object.keys(CONFIG_CATEGORIES).map((category) => (
+                {categories.map((category) => (
                   <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`w-full px-3 py-2 text-left text-sm font-semibold transition-colors ${
-                      activeCategory === category
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-foreground hover:bg-secondary'
-                    } `}
+                    className={tw('w-full px-3 py-2 text-left text-sm font-semibold transition-colors', {
+                      'bg-primary text-primary-foreground': activeCategory === category,
+                      'text-foreground hover:bg-secondary': activeCategory !== category
+                    })}
                   >
                     {category}
                   </button>
@@ -115,9 +130,10 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                 <div className="bg-border my-2 h-px" />
                 <button
                   onClick={() => setActiveCategory('All')}
-                  className={`w-full px-3 py-2 text-left text-sm font-semibold transition-colors ${
-                    activeCategory === 'All' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-secondary'
-                  } `}
+                  className={tw('w-full px-3 py-2 text-left text-sm font-semibold transition-colors', {
+                    'bg-primary text-primary-foreground': activeCategory === 'All',
+                    'text-foreground hover:bg-secondary': activeCategory !== 'All'
+                  })}
                 >
                   All Settings
                 </button>
@@ -157,24 +173,14 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
             <div className="bg-card border-border border">
               <div className="border-border flex items-center justify-between border-b p-4">
                 <h2 className="text-muted-foreground text-sm font-bold tracking-widest">
-                  {searchQuery ? 'SEARCH RESULTS' : activeCategory.toUpperCase()}
+                  {searchQuery ? 'SEARCH RESULTS' : activeCategory?.toUpperCase()}
                 </h2>
                 <span className="text-muted-foreground text-xs">
-                  {searchQuery
-                    ? filteredEntries.length
-                    : activeCategory === 'All'
-                      ? Object.keys(config).length
-                      : getCategoryEntries(activeCategory).length}{' '}
-                  SETTINGS
+                  {searchQuery ? filteredEntries.length : getCategoryEntries(activeCategory).length} SETTINGS
                 </span>
               </div>
               <div className="divide-border divide-y">
-                {(searchQuery
-                  ? filteredEntries
-                  : activeCategory === 'All'
-                    ? Object.entries(config)
-                    : getCategoryEntries(activeCategory)
-                ).map(([key, value]) => (
+                {(searchQuery ? filteredEntries : getCategoryEntries(activeCategory)).map(([key, value]) => (
                   <div key={key} className="hover:bg-secondary/50 p-4 transition-colors">
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0 flex-1">
@@ -190,12 +196,7 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                     </div>
                   </div>
                 ))}
-                {(searchQuery
-                  ? filteredEntries
-                  : activeCategory === 'All'
-                    ? Object.entries(config)
-                    : getCategoryEntries(activeCategory)
-                ).length === 0 && (
+                {(searchQuery ? filteredEntries : getCategoryEntries(activeCategory)).length === 0 && (
                   <div className="p-12 text-center">
                     <p className="text-muted-foreground">No settings found</p>
                   </div>
