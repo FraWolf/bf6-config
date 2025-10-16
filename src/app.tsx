@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import ConfigEditor from '@/components/config-editor';
 import type { LocalStorageConfig } from './typings';
+import { parseConfigFile } from './utils';
+import { unparsedSampleFile } from './data/sample';
 
 export function App() {
   const [configData, setConfigData] = useState<Record<string, Record<string, any>> | null>(null);
@@ -23,6 +25,17 @@ export function App() {
     }
 
     if (!configData && !fileName) {
+      // Check if there is the sample query param
+      const sampleQueryParam = new URL(window.location.href)?.searchParams?.get('sample') !== null;
+      if (sampleQueryParam) {
+        const sampleContent = parseConfigFile(unparsedSampleFile);
+
+        // Force update values from sample file
+        setConfigData(sampleContent);
+        setFileName('sample_PROFSAVE_profile');
+        return;
+      }
+
       const localStorageConfig = localStorage.getItem('configFile');
       if (localStorageConfig) {
         const data: LocalStorageConfig = JSON.parse(localStorageConfig);
