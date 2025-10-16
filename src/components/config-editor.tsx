@@ -198,14 +198,6 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                         </a>
                       </div>
                     ))}
-
-                    <div className="bg-border my-2 h-px" />
-                    <p className="text-center text-xs text-white opacity-50">
-                      made by{' '}
-                      <a href="https://frawolf.dev" className="text-primary" target="_blank">
-                        frawolf.dev
-                      </a>
-                    </p>
                   </nav>
                 </div>
               )}
@@ -278,6 +270,22 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
             </div>
           </main>
         </div>
+      </div>
+
+      {/* Copyright footer */}
+      <div className="mx-auto my-6 flex w-full max-w-2xl flex-col items-center gap-2 text-center">
+        <p className="text-muted-foreground text-xs">
+          All rights to the Battlefield franchise, including its trademarks, logos, characters, and related content, are the
+          property of Electronic Arts Inc. (EA) and its subsidiary DICE (EA Digital Illusions CE AB). This project/fan work
+          is not affiliated with, endorsed by, or sponsored by EA or DICE. All rights reserved to their respective owners.
+        </p>
+
+        <p className="text-muted-foreground/50 text-xs">
+          made by{' '}
+          <a href="https://frawolf.dev" className="text-primary/50 font-bold" target="_blank">
+            frawolf.dev
+          </a>
+        </p>
       </div>
     </div>
   );
