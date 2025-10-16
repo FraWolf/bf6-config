@@ -26,3 +26,11 @@ export const parseConfigFile = (content: string): Record<string, Record<string, 
 
   return config;
 };
+
+export function removeQueryParam(param: string) {
+  const url = new URL(window.location.href);
+  url.searchParams.delete(param);
+
+  // Update the URL without reloading the page
+  window.history.replaceState({}, '', url);
+}

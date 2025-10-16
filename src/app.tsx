@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import FileUploader from '@/components/file-uploader';
 import ConfigEditor from '@/components/config-editor';
 import type { LocalStorageConfig } from './typings';
-import { parseConfigFile } from './utils';
+import { parseConfigFile, removeQueryParam } from './utils';
 import { unparsedSampleFile } from './data/sample';
 
 export function App() {
@@ -26,8 +26,12 @@ export function App() {
 
     if (!configData && !fileName) {
       // Check if there is the sample query param
-      const sampleQueryParam = new URL(window.location.href)?.searchParams?.get('sample') !== null;
+      const queryParams = new URL(window.location.href)?.searchParams;
+      const sampleQueryParam = queryParams?.get('sample') !== null;
       if (sampleQueryParam) {
+        // Remove query param from url
+        removeQueryParam('sample');
+
         const sampleContent = parseConfigFile(unparsedSampleFile);
 
         // Force update values from sample file
