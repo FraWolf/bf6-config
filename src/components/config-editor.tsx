@@ -153,7 +153,10 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                   {categories.map((category) => (
                     <button
                       key={category}
-                      onClick={() => setActiveCategory(category)}
+                      onClick={() => {
+                        setActiveCategory(category);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
                         'bg-primary text-primary-foreground': activeCategory === category,
                         'text-foreground hover:bg-secondary': activeCategory !== category
@@ -164,7 +167,10 @@ export default function ConfigEditor({ configData, fileName, onBack, onSave }: C
                   ))}
                   <div className="bg-border my-2 h-px" />
                   <button
-                    onClick={() => setActiveCategory('All')}
+                    onClick={() => {
+                      setActiveCategory('All');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     className={tw('w-full cursor-pointer px-3 py-2 text-left text-sm font-semibold transition-colors', {
                       'bg-primary text-primary-foreground': activeCategory === 'All',
                       'text-foreground hover:bg-secondary': activeCategory !== 'All'
